@@ -1,0 +1,582 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Koshibar Tunnel</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="style.css">
+<style>
+    *{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:'Poppins',sans-serif;
+}
+
+body{
+background:#0a0a0a;
+color:#fff;
+padding-bottom:90px;
+}
+
+/* HEADER */
+
+.header{
+height:70px;
+background:linear-gradient(90deg,#6a00ff,#8a2be2);
+display:flex;
+justify-content:space-between;
+align-items:center;
+padding:0 20px;
+position:sticky;
+top:0;
+z-index:100;
+box-shadow:0 4px 15px rgba(0,0,0,.4);
+}
+
+.logo{
+font-size:22px;
+font-weight:700;
+}
+
+#menuBtn,
+.settings-btn{
+font-size:28px;
+cursor:pointer;
+}
+
+/* SIDEBAR */
+
+.sidebar{
+position:fixed;
+top:0;
+left:-280px;
+width:280px;
+height:100%;
+background:#111;
+z-index:1000;
+transition:.3s;
+overflow-y:auto;
+}
+
+.sidebar.active{
+left:0;
+}
+
+.sidebar-header{
+padding:25px;
+background:#6a00ff;
+}
+
+.sidebar-header h2{
+font-size:24px;
+margin-bottom:5px;
+}
+
+.sidebar-header p{
+font-size:14px;
+opacity:.8;
+}
+
+.sidebar a{
+display:block;
+padding:18px 25px;
+color:white;
+text-decoration:none;
+border-bottom:1px solid rgba(255,255,255,.05);
+transition:.3s;
+}
+
+.sidebar a:hover{
+background:#1b1b1b;
+padding-left:35px;
+}
+
+.overlay{
+position:fixed;
+top:0;
+left:0;
+width:100%;
+height:100%;
+background:rgba(0,0,0,.7);
+display:none;
+z-index:999;
+}
+
+.overlay.active{
+display:block;
+}
+
+/* MAIN */
+
+.container{
+padding:20px;
+}
+
+.card{
+background:#141414;
+border-radius:20px;
+padding:20px;
+margin-bottom:18px;
+border:1px solid rgba(255,255,255,.05);
+box-shadow:0 0 15px rgba(0,0,0,.3);
+}
+
+/* STATUS */
+
+.switch-box{
+display:flex;
+justify-content:space-between;
+align-items:center;
+}
+
+.status{
+font-size:70px;
+font-weight:700;
+}
+
+.state{
+font-size:18px;
+color:#aaa;
+}
+
+/* SWITCH */
+
+.switch{
+position:relative;
+width:75px;
+height:38px;
+}
+
+.switch input{
+display:none;
+}
+
+.slider{
+position:absolute;
+top:0;
+left:0;
+right:0;
+bottom:0;
+background:#444;
+border-radius:50px;
+cursor:pointer;
+transition:.3s;
+}
+
+.slider:before{
+content:"";
+position:absolute;
+height:30px;
+width:30px;
+left:4px;
+top:4px;
+background:white;
+border-radius:50%;
+transition:.3s;
+}
+
+input:checked + .slider{
+background:#00ff88;
+}
+
+input:checked + .slider:before{
+transform:translateX(37px);
+}
+
+/* MODE */
+
+.info-card{
+display:flex;
+justify-content:space-between;
+align-items:center;
+}
+
+.info-title{
+font-size:13px;
+color:#888;
+margin-bottom:5px;
+}
+
+#mode{
+font-size:20px;
+font-weight:700;
+color:#00ff88;
+}
+
+#timer{
+font-size:20px;
+font-weight:700;
+color:#ffd700;
+}
+
+/* IP */
+
+.ip{
+font-size:18px;
+color:#00ff88;
+font-weight:600;
+}
+
+/* TRAFFIC */
+
+.stats{
+display:flex;
+justify-content:space-between;
+align-items:center;
+}
+
+.download{
+font-size:20px;
+font-weight:600;
+color:#00bfff;
+}
+
+.upload{
+font-size:20px;
+font-weight:600;
+color:#ff5555;
+}
+
+/* GRAPH */
+
+.section-title{
+margin-bottom:15px;
+font-size:18px;
+}
+
+.graph-box{
+height:200px;
+border-radius:15px;
+border:2px solid #00ff88;
+padding:10px;
+display:flex;
+justify-content:center;
+align-items:center;
+background:#0f0f0f;
+}
+
+#trafficChart{
+width:100%;
+height:100%;
+}
+
+/* SERVER */
+
+.server-info{
+display:flex;
+justify-content:space-between;
+font-size:16px;
+}
+
+#protocol{
+color:#00ff88;
+font-weight:700;
+}
+
+#serverStatus{
+color:#ff5555;
+font-weight:700;
+}
+
+/* LOGS */
+
+.logs-title{
+font-size:18px;
+font-weight:600;
+margin-bottom:15px;
+color:#ffd700;
+}
+
+.logs{
+background:#0f0f0f;
+border-radius:12px;
+padding:15px;
+height:220px;
+overflow:auto;
+}
+
+.logs::-webkit-scrollbar{
+width:4px;
+}
+
+.logs::-webkit-scrollbar-thumb{
+background:#6a00ff;
+}
+
+.log{
+font-size:14px;
+margin-bottom:10px;
+color:#ddd;
+line-height:1.5;
+}
+
+/* BOTTOM NAV */
+
+.bottom-nav{
+position:fixed;
+bottom:0;
+left:0;
+width:100%;
+height:70px;
+background:#111;
+display:flex;
+justify-content:space-around;
+align-items:center;
+border-top:1px solid rgba(255,255,255,.05);
+}
+
+.nav-item{
+text-align:center;
+font-size:13px;
+color:#888;
+cursor:pointer;
+}
+
+.nav-item.active{
+color:#00ff88;
+font-weight:700;
+}
+
+/* RESPONSIVE */
+
+@media(max-width:480px){
+
+.status{
+font-size:55px;
+}
+
+.logo{
+font-size:18px;
+}
+
+.download,
+.upload{
+font-size:16px;
+}
+
+#mode,
+#timer{
+font-size:16px;
+}
+
+}
+.graph-box{
+height:220px;
+border:2px solid #00ff88;
+border-radius:20px;
+padding:10px;
+background:#0f0f0f;
+overflow:hidden;
+}
+
+#trafficChart{
+width:100%;
+height:100%;
+display:block;
+}
+</style>
+</head>
+
+<body>
+
+<!-- OVERLAY -->
+<div class="overlay" id="overlay"></div>
+
+<!-- SIDEBAR -->
+<div class="sidebar" id="sidebar">
+
+    <div class="sidebar-header">
+        <h2>Koshibar Tunnel</h2>
+        <p>Premium VPN</p>
+    </div>
+
+    <a href="index.html">🏠 Home</a>
+    <a href="ssh.html">🔐 SSH Configuration</a>
+    <a href="v2ray.html">🌐 V2Ray Configuration</a>
+    <a href="#">📂 Backup</a>
+    <a href="#">📥 Restore</a>
+    <a href="#">⚙️ Settings</a>
+    <a href="#">ℹ️ About</a>
+
+</div>
+
+<!-- HEADER -->
+<header class="header">
+
+    <div id="menuBtn">☰</div>
+
+    <div class="logo">
+        Koshibar Tunnel
+    </div>
+
+    <div class="settings-btn">
+        ⚙️
+    </div>
+
+</header>
+
+<!-- MAIN -->
+<div class="container">
+
+    <!-- VPN STATUS -->
+    <div class="card">
+
+        <div class="switch-box">
+
+            <div>
+
+                <div class="status" id="status">
+                    OFF
+                </div>
+
+                <div class="state" id="state">
+                    Disconnected
+                </div>
+
+            </div>
+
+            <label class="switch">
+
+                <input type="checkbox" id="vpnSwitch">
+
+                <span class="slider"></span>
+
+            </label>
+
+        </div>
+
+    </div>
+
+    <!-- MODE & UPTIME -->
+    <div class="card info-card">
+
+        <div>
+            <div class="info-title">MODE</div>
+            <div id="mode">SSH</div>
+        </div>
+
+        <div>
+            <div class="info-title">UPTIME</div>
+            <div id="timer">00:00:00</div>
+        </div>
+
+    </div>
+
+    <!-- TRAFFIC -->
+    <div class="card">
+
+        <div class="stats">
+
+            <div class="download" id="download">
+                ⬇ 0 KB/s
+            </div>
+
+            <div class="upload" id="upload">
+                ⬆ 0 KB/s
+            </div>
+
+        </div>
+
+    </div>
+   
+    <!-- GRAPH -->
+    <div class="card">
+
+        <h3 class="section-title">
+            Network Traffic
+        </h3>
+
+        <div class="graph-box">
+
+            <canvas
+                id="trafficChart"
+                width="350"
+                height="180">
+            </canvas>
+
+        </div>
+
+    </div>
+   <!-- IP -->
+    <div class="card">
+
+        <div class="ip">
+            🌍 IP :
+            <span id="ip">
+                10.96.43.100
+            </span>
+        </div>
+
+    </div>
+    <!-- SERVER INFO -->
+    <div class="card">
+
+        <div class="server-info">
+
+            <div>
+                Protocol :
+                <span id="protocol">
+                    SSH
+                </span>
+            </div>
+
+            <div>
+                Status :
+                <span id="serverStatus">
+                    Offline
+                </span>
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- LOGS -->
+    <div class="card">
+
+        <div class="logs-title">
+            📜 Connection Logs
+        </div>
+
+        <div class="logs" id="logs">
+
+            <div class="log">
+                [07:55] Koshibar Tunnel Ready
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<!-- FOOTER NAV -->
+<div class="bottom-nav">
+
+    <div class="nav-item active">
+        🏠<br>Home
+    </div>
+
+    <div class="nav-item">
+        🌐<br>Servers
+    </div>
+
+    <div class="nav-item">
+        📊<br>Stats
+    </div>
+
+    <div class="nav-item">
+        ⚙️<br>Settings
+    </div>
+
+</div>
+
+<script src="app.js"></script>
+
+</body>
+</html>
